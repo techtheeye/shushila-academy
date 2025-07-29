@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sushila Academy School</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(42, 82, 152, 0.85), rgba(30, 60, 114, 0.9)),
+                  url('https://images.unsplash.com/photo-1571260899304-425eee4c7efc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    header, .section, .hero, footer {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 40px 20px;
+      margin: 20px auto;
+      border-radius: 20px;
+      max-width: 1200px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    header h1 {
+      text-align: center;
+      font-size: 3rem;
+    }
+
+    nav {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: #ffcc00;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: #fff;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      text-align: center;
+      color: #ffcc00;
+    }
+
+    .hero p {
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    .services, .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      width: 280px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .gallery img {
+      width: 280px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e6b800;
+    }
+
+    table {
+      width: 100%;
+      background-color: rgba(255,255,255,0.1);
+      color: #fff;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th, table td {
+      padding: 10px;
+      border: 1px solid #fff;
+    }
+
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border-radius: 15px;
+      border: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #ccc;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header data-aos="fade-down">
+    <h1>Sushila Academy School</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#calendar">Calendar</a>
+      <a href="#fee">Fee Payment</a>
+      <a href="#login">Login</a>
+    </nav>
+  </header>
+
+  <section class="hero" data-aos="zoom-in">
+    <h2>Welcome to Sushila Academy</h2>
+    <p>Empowering Young Minds for a Brighter Tomorrow</p>
+  </section>
+
+  <section class="section" id="about" data-aos="fade-right">
+    <h3>About Us</h3>
+    <p>Sushila Academy is a place where education meets excellence. With experienced faculty and a nurturing environment, we help every child grow intellectually and emotionally.</p>
+  </section>
+
+  <section class="section" id="services" data-aos="fade-up">
+    <h3>Our Services</h3>
+    <div class="services">
+      <div class="card" data-aos="zoom-in" data-aos-delay="100">
+        <h4>Smart Classes</h4>
+        <p>Interactive learning through modern digital classrooms.</p>
+      </div>
+      <div class="card" data-aos="zoom-in" data-aos-delay="200">
+        <h4>Library Access</h4>
+        <p>Vast collection of books, journals, and digital resources.</p>
+      </div>
+      <div class="card" data-aos="zoom-in" data-aos-delay="300">
+        <h4>Sports & Activities</h4>
+        <p>Encouraging physical education and team spirit.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="gallery" data-aos="fade-left">
+    <h3>School Gallery</h3>
+    <div class="gallery">
+      <img src="https://via.placeholder.com/300x180?text=Library" alt="Library" data-aos="flip-left" data-aos-delay="100">
+      <img src="https://via.placeholder.com/300x180?text=Classroom" alt="Classroom" data-aos="flip-left" data-aos-delay="200">
+      <img src="https://via.placeholder.com/300x180?text=Playground" alt="Playground" data-aos="flip-left" data-aos-delay="300">
+    </div>
+  </section>
+
+  <section class="section" id="calendar" data-aos="fade-right">
+    <h3>School Calendar</h3>
+    <table>
+      <tr><th>Month</th><th>Event</th></tr>
+      <tr><td>August</td><td>Independence Day Celebration</td></tr>
+      <tr><td>September</td><td>Teachers’ Day Function</td></tr>
+      <tr><td>October</td><td>Annual Sports Week</td></tr>
+    </table>
+  </section>
+
+  <section class="section" id="fee" data-aos="flip-up">
+    <h3>Online Fee Payment</h3>
+    <input type="text" placeholder="Student Name" data-aos="fade-up" data-aos-delay="100">
+    <input type="text" placeholder="Roll Number" data-aos="fade-up" data-aos-delay="200">
+    <input type="number" placeholder="Amount (INR)" data-aos="fade-up" data-aos-delay="300">
+    <button data-aos="zoom-in" data-aos-delay="400">Pay Now</button>
+  </section>
+
+  <section class="section" id="login" data-aos="flip-left">
+    <h3>Student Login</h3>
+    <input type="text" placeholder="Username" data-aos="fade-up" data-aos-delay="100">
+    <input type="password" placeholder="Password" data-aos="fade-up" data-aos-delay="200">
+    <button data-aos="zoom-in" data-aos-delay="300">Login</button>
+  </section>
+
+  <section class="section" data-aos="fade-up">
+    <h3>Find Us</h3>
+    <div class="map-container">
+      <iframe src="https://maps.google.com/maps?q=Delhi&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+    </div>
+  </section>
+
+  <footer data-aos="fade-in">
+    &copy; 2025 Sushila Academy School. All rights reserved.
+  </footer>
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      once: true,
+      easing: 'ease-in-out',
+    });
+  </script>
+
+</body>
+</html>

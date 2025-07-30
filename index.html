@@ -187,10 +187,156 @@
   <section class="section" id="calendar" data-aos="fade-right">
     <h3>School Calendar</h3>
     <table>
-      <tr><th>Month</th><th>Event</th></tr>
-      <tr><td>August</td><td>Independence Day Celebration</td></tr>
-      <tr><td>September</td><td>Teachers’ Day Function</td></tr>
-      <tr><td>October</td><td>Annual Sports Week</td></tr>
+      <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📅 School Activity Calendar | Shushila Academy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      background: linear-gradient(to right, #fef08a, #93c5fd);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      animation: bgFade 15s ease infinite alternate;
+    }
+
+    @keyframes bgFade {
+      from { background: linear-gradient(to right, #fef08a, #93c5fd); }
+      to   { background: linear-gradient(to right, #93c5fd, #fef08a); }
+    }
+
+    .animate-pop {
+      animation: popIn 0.6s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-out both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hover-zoom:hover {
+      transform: scale(1.05);
+      transition: all 0.3s ease-in-out;
+    }
+
+    #calendar {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      animation: popIn 1s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-yellow-400 via-yellow-300 to-blue-400 text-white p-5 shadow-lg flex justify-between items-center animate-pop">
+    <h1 class="text-3xl font-bold flex items-center gap-2">📘 Shushila Academy</h1>
+    <button onclick="toggleExplore()" class="group relative p-2 rounded-full hover:bg-blue-600 transition duration-300" title="Explore">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current text-white group-hover:text-gray-200" viewBox="0 0 24 24">
+        <circle cx="12" cy="5" r="2"/>
+        <circle cx="12" cy="12" r="2"/>
+        <circle cx="12" cy="19" r="2"/>
+      </svg>
+      <div class="absolute -top-10 right-0 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300">
+        Explore
+      </div>
+    </button>
+  </header>
+
+  <!-- Explore Section -->
+  <section id="explore-section" class="hidden max-w-6xl mx-auto mt-8 p-6 bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl fade-in">
+    <h2 class="text-xl font-bold text-blue-800 mb-4">🧭 Explore Section</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <a href="https://davkatar.github.io/report/" class="transition-transform hover-zoom p-4 bg-yellow-50 border rounded-xl shadow-lg">
+        <h3 class="text-lg font-semibold text-yellow-800 mb-1">📢 Report Issues</h3>
+        <p class="text-sm text-gray-600">Let us know if something’s wrong!</p>
+      </a>
+      <a href="https://davkatar.github.io/dav/" class="transition-transform hover-zoom p-4 bg-blue-50 border rounded-xl shadow-lg">
+        <h3 class="text-lg font-semibold text-blue-800 mb-1">💬 Q&A Portal</h3>
+        <p class="text-sm text-gray-600">Ask questions, get help!</p>
+      </a>
+      <a href="#" class="transition-transform hover-zoom p-4 bg-yellow-100 border rounded-xl shadow-lg">
+        <h3 class="text-lg font-semibold text-blue-900 mb-1">✨ More Tools</h3>
+        <p class="text-sm text-gray-600">More features coming soon!</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Title -->
+  <h2 class="text-center text-3xl font-bold text-blue-700 mt-12 fade-in">📅 School Activity Calendar</h2>
+
+  <!-- Calendar Container -->
+  <div id="calendar"></div>
+
+  <!-- Script -->
+  <script>
+    function toggleExplore() {
+      const section = document.getElementById('explore-section');
+      section.classList.toggle('hidden');
+      section.classList.add('fade-in');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+      const today = new Date().toISOString().slice(0, 10);
+
+      const specialDays = ['2025-08-15', '2025-06-01', '2025-11-14']; // Add more as needed
+
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+        events: [
+          { title: '🎉 Eid-ul-Fitr', start: '2025-03-31', color: '#1e88e5' },
+          { title: '🌸 Ram Navami', start: '2025-04-06', color: '#fdd835' },
+          { title: '🏖 Summer Vacation', start: '2025-05-19', end: '2025-06-15', color: '#00acc1' },
+          { title: '📝 Annual Exam', start: '2025-03-06', end: '2025-03-24', color: '#5e35b1' },
+          { title: "👧 Children's Day", start: '2025-11-14', color: '#fb8c00' },
+          { title: "🍎 Teacher's Day", start: '2025-09-05', color: '#43a047' },
+          { title: "🏫 Shushila Academy Foundation Day", start: '2025-06-01', color: '#3949ab' },
+          { title: '🇮🇳 Independence Day', start: '2025-08-15', color: '#d32f2f' },
+          { title: '🎄 Christmas', start: '2025-12-25', color: '#c62828' },
+        ],
+        eventDidMount: function (info) {
+          if (info.event.startStr === today) {
+            alert("📌 Today: " + info.event.title);
+          }
+
+          if (specialDays.includes(info.event.startStr)) {
+            setTimeout(() => {
+              confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+            }, 300);
+          }
+        }
+      });
+
+      calendar.render();
+    });
+  </script>
+
+</body>
+</html>
     </table>
   </section>
 
@@ -212,7 +358,7 @@
   <section class="section" data-aos="fade-up">
     <h3>Find Us</h3>
     <div class="map-container">
-      <iframe src="https://maps.google.com/maps?q=Delhi&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+      <iframe src="https://maps.app.goo.gl/zK5RgSNYfKeW5zTV6?g_st=aw"></iframe>
     </div>
   </section>
 

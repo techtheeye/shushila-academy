@@ -83,6 +83,14 @@
       text-decoration: underline;
     }
 
+    #successMsg {
+      color: green;
+      text-align: center;
+      display: none;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
     @keyframes fadeIn {
       from {opacity: 0; transform: translateY(30px);}
       to {opacity: 1; transform: translateY(0);}
@@ -93,9 +101,9 @@
 
   <div class="payment-form" data-aos="flip-up">
     <h2>💳 Online Fee Payment</h2>
-    <form action="#" method="POST">
+    <form id="paymentForm">
       <input type="text" name="studentName" placeholder="👤 Student Name" required />
-      <input type="text" name="class" placeholder="🏫 Class" required />
+      <input type="text" name="studentClass" placeholder="🏫 Class" required />
       <input type="text" name="roll" placeholder="🎓 Roll Number" required />
       
       <select name="paymentMethod" required>
@@ -105,14 +113,24 @@
         <option value="NetBanking">Net Banking</option>
       </select>
       
-      <input type="number" name="amount" placeholder="₹ Enter Amount" required />
+      <input type="number" name="amount" placeholder="₹ Enter Amount" min="1" required />
       <button type="submit">Pay Now</button>
     </form>
+
+    <p id="successMsg">✅ Payment submitted successfully!</p>
 
     <a href="index.html" class="back-home">← Back to Home</a>
   </div>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>AOS.init();</script>
+  <script>
+    AOS.init();
+
+    // Simulated form submission success
+    document.getElementById("paymentForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // prevent actual submission
+      document.getElementById("successMsg").style.display = "block";
+    });
+  </script>
 </body>
 </html>

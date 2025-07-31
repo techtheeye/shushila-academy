@@ -52,6 +52,11 @@
       background: #e8f5e9;
     }
 
+    input[readonly] {
+      background: #e0e0e0;
+      cursor: not-allowed;
+    }
+
     button {
       width: 100%;
       padding: 14px;
@@ -105,15 +110,32 @@
       <input type="text" name="studentName" placeholder="👤 Student Name" required />
       <input type="text" name="studentClass" placeholder="🏫 Class" required />
       <input type="text" name="roll" placeholder="🎓 Roll Number" required />
-      
+
+      <select name="month" id="monthSelect" required>
+        <option value="">📅 Select Month</option>
+        <option value="January">January – ₹1000</option>
+        <option value="February">February – ₹1000</option>
+        <option value="March">March – ₹1000</option>
+        <option value="April">April – ₹1000</option>
+        <option value="May">May – ₹1000</option>
+        <option value="June">June – ₹1000</option>
+        <option value="July">July – ₹1000</option>
+        <option value="August">August – ₹1000</option>
+        <option value="September">September – ₹1000</option>
+        <option value="October">October – ₹1000</option>
+        <option value="November">November – ₹1000</option>
+        <option value="December">December – ₹1000</option>
+      </select>
+
       <select name="paymentMethod" required>
         <option value="">💰 Select Payment Method</option>
         <option value="UPI">UPI</option>
         <option value="Card">Credit/Debit Card</option>
         <option value="NetBanking">Net Banking</option>
       </select>
-      
-      <input type="number" name="amount" placeholder="₹ Enter Amount" min="1" required />
+
+      <input type="text" id="amount" name="amount" placeholder="₹ Amount" readonly required />
+
       <button type="submit">Pay Now</button>
     </form>
 
@@ -126,9 +148,31 @@
   <script>
     AOS.init();
 
-    // Simulated form submission success
+    const monthSelect = document.getElementById("monthSelect");
+    const amountInput = document.getElementById("amount");
+
+    const monthFees = {
+      January: 1000,
+      February: 1000,
+      March: 1000,
+      April: 1000,
+      May: 1000,
+      June: 1000,
+      July: 1000,
+      August: 1000,
+      September: 1000,
+      October: 1000,
+      November: 1000,
+      December: 1000
+    };
+
+    monthSelect.addEventListener("change", function () {
+      const selected = this.value;
+      amountInput.value = selected ? `₹${monthFees[selected]}` : "";
+    });
+
     document.getElementById("paymentForm").addEventListener("submit", function(e) {
-      e.preventDefault(); // prevent actual submission
+      e.preventDefault();
       document.getElementById("successMsg").style.display = "block";
     });
   </script>

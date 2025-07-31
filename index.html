@@ -4,377 +4,207 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sushila Academy School</title>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
   <style>
     body {
-      margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(rgba(42, 82, 152, 0.85), rgba(30, 60, 114, 0.9)),
-                  url('https://images.unsplash.com/photo-1571260899304-425eee4c7efc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
+      margin: 0;
+      background: #f9f9f9;
+      color: #333;
     }
 
-    header, .section, .hero, footer {
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 40px 20px;
-      margin: 20px auto;
-      border-radius: 20px;
-      max-width: 1200px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-    }
-
-    header h1 {
+    header {
+      background: linear-gradient(to right, #003973, #e5e5be);
+      color: white;
+      padding: 20px;
       text-align: center;
-      font-size: 3rem;
+      position: relative;
     }
 
-    nav {
-      text-align: center;
+    .logo-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .logo-section img {
+      width: 100px;
+      height: auto;
+    }
+
+    .header-buttons {
       margin-top: 10px;
     }
 
-    nav a {
-      color: #ffcc00;
-      margin: 0 15px;
+    .header-buttons a {
       text-decoration: none;
+      color: white;
+      background: #0077b6;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 8px;
       font-weight: 600;
+      transition: 0.3s;
+      display: inline-block;
     }
 
-    nav a:hover {
-      color: #fff;
-    }
-
-    .hero h2 {
-      font-size: 2.5rem;
-      text-align: center;
-      color: #ffcc00;
-    }
-
-    .hero p {
-      text-align: center;
-      font-size: 1.2rem;
-    }
-
-    .services, .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 20px;
-      width: 280px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
-
-    .gallery img {
-      width: 280px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-      transition: transform 0.3s;
-    }
-
-    .gallery img:hover {
+    .header-buttons a:hover {
+      background: #023e8a;
       transform: scale(1.05);
     }
 
-    input, button {
+    section {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: #003973;
+      margin-bottom: 20px;
+    }
+
+    .notice-board {
+      background: #fff;
+      border-left: 6px solid #f44336;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      animation: slide-in 1s ease;
+    }
+
+    .notice-board ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .notice-board li {
+      padding: 10px 0;
+      border-bottom: 1px dashed #ccc;
+      font-size: 16px;
+    }
+
+    .notice-board li:last-child {
+      border-bottom: none;
+    }
+
+    .principal-message, .about-school, .contact-info, .photo-gallery {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+      animation: fade-up 1s ease-in-out;
+    }
+
+    .photo-gallery img {
       width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
+      max-width: 300px;
+      margin: 10px;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
     }
 
-    button {
-      background-color: #ffcc00;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #e6b800;
-    }
-
-    table {
-      width: 100%;
-      background-color: rgba(255,255,255,0.1);
-      color: #fff;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    table th, table td {
-      padding: 10px;
-      border: 1px solid #fff;
-    }
-
-    .map-container iframe {
-      width: 100%;
-      height: 300px;
-      border-radius: 15px;
-      border: none;
+    .photo-gallery img:hover {
+      transform: scale(1.05);
     }
 
     footer {
       text-align: center;
       padding: 20px;
-      color: #ccc;
+      background: #003973;
+      color: white;
+    }
+
+    @keyframes slide-in {
+      0% { transform: translateX(-100%); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes fade-up {
+      0% { transform: translateY(20px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
     }
   </style>
 </head>
-
 <body>
 
+  <!-- Header with logo and buttons -->
   <header data-aos="fade-down">
-    <h1>Sushila Academy School</h1>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#calendar">Calendar</a>
-      <a href="#fee">Fee Payment</a>
-      <a href="#login">Login</a>
-    </nav>
+    <div class="logo-section">
+      <img src="https://chat.openai.com/c/image-url.png" alt="Sushila Academy Logo" />
+      <div>
+        <h1>Sushila Academy School</h1>
+        <p>Established in 2023 – A Vision for Quality Education</p>
+      </div>
+    </div>
+    <div class="header-buttons">
+      <a href="login.html">🔐 Login</a>
+      <a href="complaint.html">📝 Complaint</a>
+      <a href="feepayment.html">💳 Pay Fees</a>
+    </div>
   </header>
 
-  <section class="hero" data-aos="zoom-in">
-    <h2>Welcome to Sushila Academy</h2>
-    <p>Empowering Young Minds for a Brighter Tomorrow</p>
-  </section>
-
-  <section class="section" id="about" data-aos="fade-right">
-    <h3>About Us</h3>
-    <p>Sushila Academy is a place where education meets excellence. With experienced faculty and a nurturing environment, we help every child grow intellectually and emotionally.</p>
-  </section>
-
-  <section class="section" id="services" data-aos="fade-up">
-    <h3>Our Services</h3>
-    <div class="services">
-      <div class="card" data-aos="zoom-in" data-aos-delay="100">
-        <h4>Smart Classes</h4>
-        <p>Interactive learning through modern digital classrooms.</p>
-      </div>
-      <div class="card" data-aos="zoom-in" data-aos-delay="200">
-        <h4>Library Access</h4>
-        <p>Vast collection of books, journals, and digital resources.</p>
-      </div>
-      <div class="card" data-aos="zoom-in" data-aos-delay="300">
-        <h4>Sports & Activities</h4>
-        <p>Encouraging physical education and team spirit.</p>
-      </div>
+  <!-- Notice Board -->
+  <section data-aos="zoom-in">
+    <h2>📢 Notice Board</h2>
+    <div class="notice-board">
+      <ul>
+        <li>📌 1st August: New Admission Opens for 2025-26</li>
+        <li>🎉 15th August: Independence Day Celebration</li>
+        <li>📚 5th September: Teacher’s Day Function</li>
+        <li>🏆 October: Annual Sports Week</li>
+        <li>🎓 December: Final Exams Begin</li>
+      </ul>
     </div>
   </section>
 
-  <section class="section" id="gallery" data-aos="fade-left">
-    <h3>School Gallery</h3>
-    <div class="gallery">
-      <img src="https://drive.google.com/file/d/1W34FBE-MywtsnENhIs_8u6LTC8uNJ1Vp/view?usp=sharing" alt="Library" data-aos="flip-left" data-aos-delay="100">
-      <img src="https://drive.google.com/file/d/1YOHhOTCXiFK58dCwRuJ48Qg3AIyatXb6/view?usp=sharing" alt="Classroom" data-aos="flip-left" data-aos-delay="200">
-      <img src="https://drive.google.com/file/d/1FF8plFYdhRumESSrqwiXPBhTcWUENWUf/view?usp=sharing" alt="Playground" data-aos="flip-left" data-aos-delay="300">
+  <!-- Principal's Message -->
+  <section class="principal-message" data-aos="fade-up">
+    <h2>👩‍🏫 Principal's Message</h2>
+    <p>
+      Welcome to Sushila Academy, established in 2023 with a vision to provide quality education and holistic development.
+      Our goal is to nurture confident, responsible, and well-rounded individuals through modern teaching methods and strong values. 
+      Together, let’s inspire young minds and build a brighter future.
+    </p>
+    <p><strong>Warm regards,<br>[Your Name], Principal</strong></p>
+  </section>
+
+  <!-- About the School -->
+  <section class="about-school" data-aos="fade-up">
+    <h2>🏫 About the School</h2>
+    <p>Sushila Academy is committed to academic excellence, innovation in teaching, and the holistic development of every student. Our dedicated faculty and modern infrastructure support a nurturing environment for future leaders.</p>
+  </section>
+
+  <!-- Photo Gallery -->
+  <section class="photo-gallery" data-aos="fade-up">
+    <h2>🖼 Photo Gallery</h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+      <img src="https://source.unsplash.com/300x200/?school,classroom" alt="Gallery 1">
+      <img src="https://source.unsplash.com/301x200/?students,learning" alt="Gallery 2">
+      <img src="https://source.unsplash.com/302x200/?education,school" alt="Gallery 3">
     </div>
   </section>
 
-  <section class="section" id="calendar" data-aos="fade-right">
-    <h3>School Calendar</h3>
-    <table>
-      <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📅 School Activity Calendar | Shushila Academy</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-  <style>
-    body {
-      background: linear-gradient(to right, #fef08a, #93c5fd);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      animation: bgFade 15s ease infinite alternate;
-    }
-
-    @keyframes bgFade {
-      from { background: linear-gradient(to right, #fef08a, #93c5fd); }
-      to   { background: linear-gradient(to right, #93c5fd, #fef08a); }
-    }
-
-    .animate-pop {
-      animation: popIn 0.6s ease;
-    }
-
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-
-    .fade-in {
-      animation: fadeIn 1s ease-out both;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .hover-zoom:hover {
-      transform: scale(1.05);
-      transition: all 0.3s ease-in-out;
-    }
-
-    #calendar {
-      max-width: 900px;
-      margin: 40px auto;
-      background: #ffffff;
-      padding: 24px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      animation: popIn 1s ease;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Header -->
-  <header class="bg-gradient-to-r from-yellow-400 via-yellow-300 to-blue-400 text-white p-5 shadow-lg flex justify-between items-center animate-pop">
-    <h1 class="text-3xl font-bold flex items-center gap-2">📘 Shushila Academy</h1>
-    <button onclick="toggleExplore()" class="group relative p-2 rounded-full hover:bg-blue-600 transition duration-300" title="Explore">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current text-white group-hover:text-gray-200" viewBox="0 0 24 24">
-        <circle cx="12" cy="5" r="2"/>
-        <circle cx="12" cy="12" r="2"/>
-        <circle cx="12" cy="19" r="2"/>
-      </svg>
-      <div class="absolute -top-10 right-0 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300">
-        Explore
-      </div>
-    </button>
-  </header>
-
-  <!-- Explore Section -->
-  <section id="explore-section" class="hidden max-w-6xl mx-auto mt-8 p-6 bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl fade-in">
-    <h2 class="text-xl font-bold text-blue-800 mb-4">🧭 Explore Section</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <a href="https://davkatar.github.io/report/" class="transition-transform hover-zoom p-4 bg-yellow-50 border rounded-xl shadow-lg">
-        <h3 class="text-lg font-semibold text-yellow-800 mb-1">📢 Report Issues</h3>
-        <p class="text-sm text-gray-600">Let us know if something’s wrong!</p>
-      </a>
-      <a href="https://davkatar.github.io/dav/" class="transition-transform hover-zoom p-4 bg-blue-50 border rounded-xl shadow-lg">
-        <h3 class="text-lg font-semibold text-blue-800 mb-1">💬 Q&A Portal</h3>
-        <p class="text-sm text-gray-600">Ask questions, get help!</p>
-      </a>
-      <a href="#" class="transition-transform hover-zoom p-4 bg-yellow-100 border rounded-xl shadow-lg">
-        <h3 class="text-lg font-semibold text-blue-900 mb-1">✨ More Tools</h3>
-        <p class="text-sm text-gray-600">More features coming soon!</p>
-      </a>
-    </div>
+  <!-- Contact Information -->
+  <section class="contact-info" data-aos="fade-up">
+    <h2>📞 Contact Information</h2>
+    <p><strong>Address:</strong> Shushila Academy, Main Road, Your City, India</p>
+    <p><strong>Phone:</strong> +91-9876543210</p>
+    <p><strong>Email:</strong> info@shushilaacademy.in</p>
   </section>
 
-  <!-- Title -->
-  <h2 class="text-center text-3xl font-bold text-blue-700 mt-12 fade-in">📅 School Activity Calendar</h2>
-
-  <!-- Calendar Container -->
-  <div id="calendar"></div>
-
-  <!-- Script -->
-  <script>
-    function toggleExplore() {
-      const section = document.getElementById('explore-section');
-      section.classList.toggle('hidden');
-      section.classList.add('fade-in');
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      const calendarEl = document.getElementById('calendar');
-      const today = new Date().toISOString().slice(0, 10);
-
-      const specialDays = ['2025-08-15', '2025-06-01', '2025-11-14']; // Add more as needed
-
-      const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,listWeek'
-        },
-        events: [
-          { title: '🎉 Eid-ul-Fitr', start: '2025-03-31', color: '#1e88e5' },
-          { title: '🌸 Ram Navami', start: '2025-04-06', color: '#fdd835' },
-          { title: '🏖 Summer Vacation', start: '2025-05-19', end: '2025-06-15', color: '#00acc1' },
-          { title: '📝 Annual Exam', start: '2025-03-06', end: '2025-03-24', color: '#5e35b1' },
-          { title: "👧 Children's Day", start: '2025-11-14', color: '#fb8c00' },
-          { title: "🍎 Teacher's Day", start: '2025-09-05', color: '#43a047' },
-          { title: "🏫 Shushila Academy Foundation Day", start: '2025-06-01', color: '#3949ab' },
-          { title: '🇮🇳 Independence Day', start: '2025-08-15', color: '#d32f2f' },
-          { title: '🎄 Christmas', start: '2025-12-25', color: '#c62828' },
-        ],
-        eventDidMount: function (info) {
-          if (info.event.startStr === today) {
-            alert("📌 Today: " + info.event.title);
-          }
-
-          if (specialDays.includes(info.event.startStr)) {
-            setTimeout(() => {
-              confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
-            }, 300);
-          }
-        }
-      });
-
-      calendar.render();
-    });
-  </script>
-
-</body>
-</html>
-    </table>
-  </section>
-
-  <section class="section" id="fee" data-aos="flip-up">
-    <h3>Online Fee Payment</h3>
-    <input type="text" placeholder="Student Name" data-aos="fade-up" data-aos-delay="100">
-    <input type="text" placeholder="Roll Number" data-aos="fade-up" data-aos-delay="200">
-    <input type="number" placeholder="Amount (INR)" data-aos="fade-up" data-aos-delay="300">
-    <button data-aos="zoom-in" data-aos-delay="400">Pay Now</button>
-  </section>
-
-  <section class="section" id="login" data-aos="flip-left">
-    <h3>Student Login</h3>
-    <input type="text" placeholder="Username" data-aos="fade-up" data-aos-delay="100">
-    <input type="password" placeholder="Password" data-aos="fade-up" data-aos-delay="200">
-    <button data-aos="zoom-in" data-aos-delay="300">Login</button>
-  </section>
-
-  <section class="section" data-aos="fade-up">
-    <h3>Find Us</h3>
-    <div class="map-container">
-      <iframe src="https://maps.app.goo.gl/zK5RgSNYfKeW5zTV6?g_st=aw"></iframe>
-    </div>
-  </section>
-
-  <footer data-aos="fade-in">
+  <footer>
     &copy; 2025 Sushila Academy School. All rights reserved.
   </footer>
 
-  <!-- AOS Script -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init({
-      duration: 1000,
-      once: true,
-      easing: 'ease-in-out',
-    });
+    AOS.init();
   </script>
-
 </body>
 </html>

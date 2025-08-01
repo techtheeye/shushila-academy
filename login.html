@@ -96,6 +96,8 @@
 
     <!-- Register Form -->
     <form id="register-form" class="hidden">
+      <input type="text" id="register-name" placeholder="Full Name" required />
+      <input type="text" id="register-class" placeholder="Class (e.g. 8A)" required />
       <input type="email" id="register-email" placeholder="Enter Email" required />
       <input type="password" id="register-password" placeholder="Create Password" required />
       <button type="submit">Register</button>
@@ -107,27 +109,30 @@
     </div>
   </div>
 
-  <!-- Firebase App (replace with your Firebase config) -->
+  <!-- Firebase SDK -->
   <script type="module">
-    // Import Firebase scripts
+    // Firebase SDK imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // TODO: Replace with your Firebase config
+    // Your Firebase config (you already gave it)
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyCGZ1XgNOIwPmxPKAkOxWcSTe5JxH3kEIs",
+      authDomain: "sushila-academy-school.firebaseapp.com",
+      projectId: "sushila-academy-school",
+      storageBucket: "sushila-academy-school.appspot.com",
+      messagingSenderId: "849978758768",
+      appId: "1:849978758768:web:a942c5ef8f568f5af046b5",
+      measurementId: "G-M5JGCLD295"
     };
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // Toggle between forms
+    // Toggle Forms
     const loginForm = document.getElementById("login-form");
     const registerForm = document.getElementById("register-form");
     const formTitle = document.getElementById("form-title");
@@ -150,53 +155,41 @@
       const password = document.getElementById("login-password").value;
 
       signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(() => {
           alert("Login successful!");
-          window.location.href = "student-dashboard.html"; // or any secure page
+          window.location.href = "student-dashboard.html";
         })
         .catch((error) => {
           alert("Login failed: " + error.message);
         });
     });
 
-    // Register Handler
-    registerForm.addEventListener("submit", (e) => {
+    // Register Handler + Firestore Data Saving
+    registerForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      const name = document.getElementById("register-name").value;
+      const studentClass = document.getElementById("register-class").value;
       const email = document.getElementById("register-email").value;
       const password = document.getElementById("register-password").value;
 
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("Registration successful! You can now login.");
-          toggleForms();
-        })
-        .catch((error) => {
-          alert("Registration failed: " + error.message);
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = userCredential.user.uid;
+
+        // Save additional student data to Firestore
+        await setDoc(doc(db, "students", uid), {
+          name: name,
+          class: studentClass,
+          email: email,
+          createdAt: new Date()
         });
+
+        alert("Registration successful! You can now login.");
+        toggleForms();
+      } catch (error) {
+        alert("Registration failed: " + error.message);
+      }
     });
-    <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyCGZ1XgNOIwPmxPKAkOxWcSTe5JxH3kEIs",
-    authDomain: "sushila-academy-school.firebaseapp.com",
-    projectId: "sushila-academy-school",
-    storageBucket: "sushila-academy-school.firebasestorage.app",
-    messagingSenderId: "849978758768",
-    appId: "1:849978758768:web:a942c5ef8f568f5af046b5",
-    measurementId: "G-M5JGCLD295"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
   </script>
 
   <!-- AOS Animation -->

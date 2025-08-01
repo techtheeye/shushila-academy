@@ -29,7 +29,7 @@
     .login-box h2 {
       text-align: center;
       color: #003973;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     .login-box input {
@@ -69,34 +69,115 @@
       font-size: 14px;
       display: block;
       margin: 5px 0;
-      transition: color 0.3s;
+      cursor: pointer;
     }
 
     .links a:hover {
       text-decoration: underline;
       color: #023e8a;
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
 
   <div class="login-box" data-aos="zoom-in">
-    <h2>Student Login</h2>
-    <form action="#" method="POST">
-      <input type="email" name="email" placeholder="Enter Email" required />
-      <input type="password" name="password" placeholder="Create Password" required />
+    <h2 id="form-title">Student Login</h2>
+    
+    <!-- Login Form -->
+    <form id="login-form">
+      <input type="email" id="login-email" placeholder="Enter Email" required />
+      <input type="password" id="login-password" placeholder="Enter Password" required />
       <button type="submit">Login</button>
     </form>
-    
+
+    <!-- Register Form -->
+    <form id="register-form" class="hidden">
+      <input type="email" id="register-email" placeholder="Enter Email" required />
+      <input type="password" id="register-password" placeholder="Create Password" required />
+      <button type="submit">Register</button>
+    </form>
+
     <div class="links" data-aos="fade-up">
-      <a href="#">Forgot Password?</a>
+      <a onclick="toggleForms()">Don't have an account? Register</a>
       <a href="index.html">← Back to Home</a>
     </div>
   </div>
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    AOS.init();
+  <!-- Firebase App (replace with your Firebase config) -->
+  <script type="module">
+    // Import Firebase scripts
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // TODO: Replace with your Firebase config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Toggle between forms
+    const loginForm = document.getElementById("login-form");
+    const registerForm = document.getElementById("register-form");
+    const formTitle = document.getElementById("form-title");
+    const toggleLink = document.querySelector(".links a");
+
+    function toggleForms() {
+      loginForm.classList.toggle("hidden");
+      registerForm.classList.toggle("hidden");
+      formTitle.textContent = loginForm.classList.contains("hidden") ? "Register" : "Student Login";
+      toggleLink.textContent = loginForm.classList.contains("hidden")
+        ? "Already have an account? Login"
+        : "Don't have an account? Register";
+    }
+    window.toggleForms = toggleForms;
+
+    // Login Handler
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Login successful!");
+          window.location.href = "student-dashboard.html"; // or any secure page
+        })
+        .catch((error) => {
+          alert("Login failed: " + error.message);
+        });
+    });
+
+    // Register Handler
+    registerForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("register-email").value;
+      const password = document.getElementById("register-password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Registration successful! You can now login.");
+          toggleForms();
+        })
+        .catch((error) => {
+          alert("Registration failed: " + error.message);
+        });
+    });
   </script>
+
+  <!-- AOS Animation -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init();</script>
 </body>
 </html>

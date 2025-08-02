@@ -96,8 +96,6 @@
 
     <!-- Register Form -->
     <form id="register-form" class="hidden">
-      <input type="text" id="register-name" placeholder="Full Name" required />
-      <input type="text" id="register-class" placeholder="Class (e.g. 8A)" required />
       <input type="email" id="register-email" placeholder="Enter Email" required />
       <input type="password" id="register-password" placeholder="Create Password" required />
       <button type="submit">Register</button>
@@ -109,37 +107,83 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase App & Firestore -->
   <script type="module">
-   import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const db = getFirestore(app); // Add this after initializing app
+    // Import Firebase libraries
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Inside register form handler
-createUserWithEmailAndPassword(auth, email, password)
-  .then(async (userCredential) => {
-    const user = userCredential.user;
-    // Save to Firestore under "students" collection
-    await setDoc(doc(db, "students", user.uid), {
-      email: email,
-      createdAt: new Date()
-    });
-    alert("Registration successful! You can now login.");
-    toggleForms();
-  })
-  .catch((error) => {
-    alert("Registration failed: " + error.message);
-  });
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
-  authDomain: "sushila-academy-school-e0783.firebaseapp.com",
-  projectId: "sushila-academy-school-e0783",
-  storageBucket: "sushila-academy-school-e0783.firebasestorage.app",
-  messagingSenderId: "583018600105",
-  appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
+    // ✅ Your Firebase Config (replace if needed)
+    const firebaseConfig = {
+apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
+authDomain: "sushila-academy-school-e0783.firebaseapp.com",
+projectId: "sushila-academy-school-e0783",
+storageBucket: "sushila-academy-school-e0783.firebasestorage.app",
+messagingSenderId: "583018600105",
+appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
 };
 
-  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Toggle Forms
+    const loginForm = document.getElementById("login-form");
+    const registerForm = document.getElementById("register-form");
+    const formTitle = document.getElementById("form-title");
+    const toggleLink = document.querySelector(".links a");
+
+    function toggleForms() {
+      loginForm.classList.toggle("hidden");
+      registerForm.classList.toggle("hidden");
+      formTitle.textContent = loginForm.classList.contains("hidden") ? "Register" : "Student Login";
+      toggleLink.textContent = loginForm.classList.contains("hidden")
+        ? "Already have an account? Login"
+        : "Don't have an account? Register";
+    }
+    window.toggleForms = toggleForms;
+
+    // Login Handler
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Login successful!");
+          window.location.href = "student-dashboard.html";
+        })
+        .catch((error) => {
+          alert("Login failed: " + error.message);
+        });
+    });
+
+    // Register Handler
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("register-email").value;
+      const password = document.getElementById("register-password").value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // ✅ Store in Firestore
+        await setDoc(doc(db, "students", user.uid), {
+          email: email,
+          createdAt: new Date().toISOString()
+        });
+
+        alert("Registration successful! You can now login.");
+        toggleForms();
+      } catch (error) {
+        alert("Registration failed: " + error.message);
+      }
+    });
+  </script>
 
   <!-- AOS Animation -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

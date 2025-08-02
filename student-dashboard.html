@@ -100,7 +100,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
@@ -115,7 +115,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    let userId;
     let studentRef;
 
     onAuthStateChanged(auth, async (user) => {
@@ -124,8 +123,7 @@
         return;
       }
 
-      userId = user.uid;
-      studentRef = doc(db, "students", userId);
+      studentRef = doc(db, "students", user.uid);
       const userSnap = await getDoc(studentRef);
 
       if (userSnap.exists()) {
@@ -139,18 +137,23 @@
         document.getElementById("admission-input").value = data.admissionNo || "";
         document.getElementById("phone-input").value = data.phone || "";
       } else {
-        alert("Profile not found in Firestore.");
+        // No doc? Create a blank one
+        await setDoc(studentRef, {
+          name: "",
+          admissionNo: "",
+          phone: "",
+          email: user.email
+        });
       }
     });
 
     document.getElementById("edit-btn").onclick = () => {
-      document.getElementById("student-name").style.display = "none";
-      document.getElementById("admission-no").style.display = "none";
-      document.getElementById("student-phone").style.display = "none";
-
-      document.getElementById("name-input").style.display = "block";
-      document.getElementById("admission-input").style.display = "block";
-      document.getElementById("phone-input").style.display = "block";
+      ["student-name", "admission-no", "student-phone"].forEach(id => {
+        document.getElementById(id).style.display = "none";
+      });
+      ["name-input", "admission-input", "phone-input"].forEach(id => {
+        document.getElementById(id).style.display = "block";
+      });
 
       document.getElementById("edit-btn").style.display = "none";
       document.getElementById("save-btn").style.display = "inline-block";
@@ -162,23 +165,23 @@
       const phone = document.getElementById("phone-input").value;
 
       try {
-        await updateDoc(studentRef, {
+        await setDoc(studentRef, {
           name,
           admissionNo,
-          phone
-        });
+          phone,
+          email: auth.currentUser.email
+        }, { merge: true });
 
         document.getElementById("student-name").textContent = name;
         document.getElementById("admission-no").textContent = admissionNo;
         document.getElementById("student-phone").textContent = phone;
 
-        document.getElementById("student-name").style.display = "inline";
-        document.getElementById("admission-no").style.display = "inline";
-        document.getElementById("student-phone").style.display = "inline";
-
-        document.getElementById("name-input").style.display = "none";
-        document.getElementById("admission-input").style.display = "none";
-        document.getElementById("phone-input").style.display = "none";
+        ["student-name", "admission-no", "student-phone"].forEach(id => {
+          document.getElementById(id).style.display = "inline";
+        });
+        ["name-input", "admission-input", "phone-input"].forEach(id => {
+          document.getElementById(id).style.display = "none";
+        });
 
         document.getElementById("edit-btn").style.display = "inline-block";
         document.getElementById("save-btn").style.display = "none";
@@ -189,6 +192,28 @@
       }
     };
 
+    // Auto-save on input
+    ["name-input", "admission-input", "phone-input"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", async () => {
+        const name = document.getElementById("name-input").value;
+        const admissionNo = document.getElementById("admission-input").value;
+        const phone = document.getElementById("phone-input").value;
+
+        try {
+          await setDoc(studentRef, {
+            name,
+            admissionNo,
+            phone,
+            email: auth.currentUser.email
+          }, { merge: true });
+
+          console.log("Auto-saved to Firestore");
+        } catch (err) {
+          console.error("Auto-save failed:", err.message);
+        }
+      });
+    });
+
     function logout() {
       signOut(auth).then(() => {
         window.location.href = "login.html";
@@ -196,22 +221,6 @@
         alert("Logout failed: " + error.message);
       });
     }
-    // Auto-save when user types
-["name-input", "admission-input", "phone-input"].forEach((id) => {
-  document.getElementById(id).addEventListener("input", async () => {
-    const name = document.getElementById("name-input").value;
-    const admissionNo = document.getElementById("admission-input").value;
-    const phone = document.getElementById("phone-input").value;
-
-    try {
-      await updateDoc(studentRef, { name, admissionNo, phone });
-      console.log("Auto-saved to Firestore");
-    } catch (err) {
-      console.error("Failed to auto-save: " + err.message);
-    }
-  });
-});
-
 
     window.logout = logout;
   </script>

@@ -22,16 +22,20 @@
       border-radius: 16px;
       box-shadow: 0 6px 15px rgba(0,0,0,0.1);
       text-align: center;
+      max-width: 400px;
+      width: 100%;
     }
 
     h2 {
       color: #003973;
+      margin-bottom: 20px;
     }
 
-    .info {
-      margin: 20px 0;
+    .info p {
+      margin: 10px 0;
       font-size: 16px;
       color: #333;
+      text-align: left;
     }
 
     button {
@@ -43,6 +47,7 @@
       color: white;
       border-radius: 8px;
       cursor: pointer;
+      margin-top: 20px;
     }
 
     button:hover {
@@ -53,9 +58,12 @@
 <body>
 
   <div class="dashboard">
-    <h2>Welcome to Your Profile</h2>
-    <div class="info">
+    <h2>Student Profile</h2>
+    <div class="info" id="profile">
+      <p><strong>Name:</strong> <span id="student-name">Loading...</span></p>
       <p><strong>Email:</strong> <span id="student-email">Loading...</span></p>
+      <p><strong>Admission No:</strong> <span id="admission-no">Loading...</span></p>
+      <p><strong>Phone No:</strong> <span id="student-phone">Loading...</span></p>
     </div>
     <button onclick="logout()">Logout</button>
   </div>
@@ -63,30 +71,44 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+    // Firebase config
     const firebaseConfig = {
-apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
-authDomain: "sushila-academy-school-e0783.firebaseapp.com",
-projectId: "sushila-academy-school-e0783",
-storageBucket: "sushila-academy-school-e0783.firebasestorage.app",
-messagingSenderId: "583018600105",
-appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
-};
+      apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
+      authDomain: "sushila-academy-school-e0783.firebaseapp.com",
+      projectId: "sushila-academy-school-e0783",
+      storageBucket: "sushila-academy-school-e0783.firebasestorage.app",
+      messagingSenderId: "583018600105",
+      appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // Show student email
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.getElementById("student-email").textContent = user.email;
-      } else {
-        // Redirect to login if not signed in
+    // Load student data after login
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
         window.location.href = "login.html";
+        return;
+      }
+
+      const userDocRef = doc(db, "students", user.uid);
+      const userSnap = await getDoc(userDocRef);
+
+      if (userSnap.exists()) {
+        const data = userSnap.data();
+        document.getElementById("student-name").textContent = data.name || "N/A";
+        document.getElementById("student-email").textContent = data.email || user.email;
+        document.getElementById("admission-no").textContent = data.admissionNo || "N/A";
+        document.getElementById("student-phone").textContent = data.phone || "N/A";
+      } else {
+        alert("Profile not found in Firestore.");
       }
     });
 
-    // Logout function
+    // Logout
     function logout() {
       signOut(auth).then(() => {
         window.location.href = "login.html";

@@ -111,19 +111,25 @@
 
   <!-- Firebase SDK -->
   <script type="module">
-    // Firebase SDK imports
-    import { // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+   import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const db = getFirestore(app); // Add this after initializing app
 
-// Your web app's Firebase configuration
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// Inside register form handler
+createUserWithEmailAndPassword(auth, email, password)
+  .then(async (userCredential) => {
+    const user = userCredential.user;
+    // Save to Firestore under "students" collection
+    await setDoc(doc(db, "students", user.uid), {
+      email: email,
+      createdAt: new Date()
+    });
+    alert("Registration successful! You can now login.");
+    toggleForms();
+  })
+  .catch((error) => {
+    alert("Registration failed: " + error.message);
+  });
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
   authDomain: "sushila-academy-school-e0783.firebaseapp.com",
@@ -133,89 +139,6 @@ const firebaseConfig = {
   appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig); } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    // Your Firebase config (you already gave it)
-   const firebaseConfig = {
-  apiKey: "AIzaSyCGZ1XgNOIwPmxPKAkOxWcSTe5JxH3kEIs",
-  authDomain: "sushila-academy-school.firebaseapp.com",
-  projectId: "sushila-academy-school",
-  storageBucket: "sushila-academy-school.appspot.com",
-  messagingSenderId: "849978758768",
-  appId: "1:849978758768:web:a942c5ef8f568f5af046b5",
-  measurementId: "G-M5JGCLD295"
-};
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // Toggle Forms
-    const loginForm = document.getElementById("login-form");
-    const registerForm = document.getElementById("register-form");
-    const formTitle = document.getElementById("form-title");
-    const toggleLink = document.querySelector(".links a");
-
-    function toggleForms() {
-      loginForm.classList.toggle("hidden");
-      registerForm.classList.toggle("hidden");
-      formTitle.textContent = loginForm.classList.contains("hidden") ? "Register" : "Student Login";
-      toggleLink.textContent = loginForm.classList.contains("hidden")
-        ? "Already have an account? Login"
-        : "Don't have an account? Register";
-    }
-    window.toggleForms = toggleForms;
-
-    // Login Handler
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = document.getElementById("login-email").value;
-      const password = document.getElementById("login-password").value;
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          alert("Login successful!");
-          window.location.href = "student-dashboard.html";
-        })
-        .catch((error) => {
-          alert("Login failed: " + error.message);
-        });
-    });
-
-    // Register Handler + Firestore Data Saving
-    registerForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const name = document.getElementById("register-name").value;
-      const studentClass = document.getElementById("register-class").value;
-      const email = document.getElementById("register-email").value;
-      const password = document.getElementById("register-password").value;
-
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = userCredential.user.uid;
-
-        // Save additional student data to Firestore
-        await setDoc(doc(db, "students", uid), {
-          name: name,
-          class: studentClass,
-          email: email,
-          createdAt: new Date()
-        });
-
-        alert("Registration successful! You can now login.");
-        toggleForms();
-      } catch (error) {
-        alert("Registration failed: " + error.message);
-      }
-    });
-  </script>
   
 
   <!-- AOS Animation -->

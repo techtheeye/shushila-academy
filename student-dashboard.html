@@ -196,6 +196,22 @@
         alert("Logout failed: " + error.message);
       });
     }
+    // Auto-save when user types
+["name-input", "admission-input", "phone-input"].forEach((id) => {
+  document.getElementById(id).addEventListener("input", async () => {
+    const name = document.getElementById("name-input").value;
+    const admissionNo = document.getElementById("admission-input").value;
+    const phone = document.getElementById("phone-input").value;
+
+    try {
+      await updateDoc(studentRef, { name, admissionNo, phone });
+      console.log("Auto-saved to Firestore");
+    } catch (err) {
+      console.error("Failed to auto-save: " + err.message);
+    }
+  });
+});
+
 
     window.logout = logout;
   </script>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard – Sushila Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .dashboard {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h2 {
+      color: #003973;
+    }
+
+    .info {
+      margin: 20px 0;
+      font-size: 16px;
+      color: #333;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      background: #003973;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard">
+    <h2>Welcome to Your Profile</h2>
+    <div class="info">
+      <p><strong>Email:</strong> <span id="student-email">Loading...</span></p>
+    </div>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
+authDomain: "sushila-academy-school-e0783.firebaseapp.com",
+projectId: "sushila-academy-school-e0783",
+storageBucket: "sushila-academy-school-e0783.firebasestorage.app",
+messagingSenderId: "583018600105",
+appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Show student email
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("student-email").textContent = user.email;
+      } else {
+        // Redirect to login if not signed in
+        window.location.href = "login.html";
+      }
+    });
+
+    // Logout function
+    function logout() {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      }).catch((error) => {
+        alert("Logout failed: " + error.message);
+      });
+    }
+
+    window.logout = logout;
+  </script>
+
+</body>
+</html>

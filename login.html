@@ -107,24 +107,7 @@
     </div>
   </div>
 
-  <!-- Firebase App & Firestore -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
-      authDomain: "sushila-academy-school-e0783.firebaseapp.com",
-      projectId: "sushila-academy-school-e0783",
-      storageBucket: "sushila-academy-school-e0783.firebasestorage.app",
-      messagingSenderId: "583018600105",
-      appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Toggle Forms
+  <script>
     const loginForm = document.getElementById("login-form");
     const registerForm = document.getElementById("register-form");
     const formTitle = document.getElementById("form-title");
@@ -140,40 +123,37 @@
     }
     window.toggleForms = toggleForms;
 
-    // Login
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const dob = document.getElementById("login-dob").value;
-      const admno = document.getElementById("login-admno").value;
-
-      const q = query(collection(db, "students"), where("dob", "==", dob), where("admissionNo", "==", admno));
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        alert("Login successful!");
-        window.location.href = "student-dashboard.html";
-      } else {
-        alert("Login failed: Incorrect DOB or Admission No");
-      }
-    });
-
-    // Register
-    registerForm.addEventListener("submit", async (e) => {
+    // Register logic using localStorage
+    registerForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const dob = document.getElementById("register-dob").value;
       const admno = document.getElementById("register-admno").value;
 
-      try {
-        const studentRef = doc(db, "students", admno); // Use admissionNo as unique ID
-        await setDoc(studentRef, {
-          dob: dob,
-          admissionNo: admno,
-          createdAt: new Date().toISOString()
-        });
-        alert("Registration successful!");
-        toggleForms();
-      } catch (error) {
-        alert("Registration failed: " + error.message);
+      let students = JSON.parse(localStorage.getItem("students")) || {};
+      if (students[admno]) {
+        alert("Admission number already registered.");
+        return;
+      }
+
+      students[admno] = { dob };
+      localStorage.setItem("students", JSON.stringify(students));
+      alert("Registration successful!");
+      toggleForms();
+    });
+
+    // Login logic using localStorage
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const dob = document.getElementById("login-dob").value;
+      const admno = document.getElementById("login-admno").value;
+
+      let students = JSON.parse(localStorage.getItem("students")) || {};
+      if (students[admno] && students[admno].dob === dob) {
+        alert("Login successful!");
+        localStorage.setItem("loggedInStudent", admno);
+        window.location.href = "student-dashboard.html";
+      } else {
+        alert("Login failed: Incorrect DOB or Admission No");
       }
     });
   </script>

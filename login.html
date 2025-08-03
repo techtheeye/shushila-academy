@@ -86,18 +86,18 @@
 
   <div class="login-box" data-aos="zoom-in">
     <h2 id="form-title">Student Login</h2>
-    
+
     <!-- Login Form -->
     <form id="login-form">
-      <input type="email" id="login-email" placeholder="Enter Email" required />
-      <input type="password" id="login-password" placeholder="Enter Password" required />
+      <input type="date" id="login-dob" required />
+      <input type="text" id="login-admno" placeholder="Enter Admission No" required />
       <button type="submit">Login</button>
     </form>
 
     <!-- Register Form -->
     <form id="register-form" class="hidden">
-      <input type="email" id="register-email" placeholder="Enter Email" required />
-      <input type="password" id="register-password" placeholder="Create Password" required />
+      <input type="date" id="register-dob" required />
+      <input type="text" id="register-admno" placeholder="Create Admission No" required />
       <button type="submit">Register</button>
     </form>
 
@@ -109,24 +109,19 @@
 
   <!-- Firebase App & Firestore -->
   <script type="module">
-    // Import Firebase libraries
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // ✅ Your Firebase Config (replace if needed)
     const firebaseConfig = {
-apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
-authDomain: "sushila-academy-school-e0783.firebaseapp.com",
-projectId: "sushila-academy-school-e0783",
-storageBucket: "sushila-academy-school-e0783.firebasestorage.app",
-messagingSenderId: "583018600105",
-appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
-};
+      apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
+      authDomain: "sushila-academy-school-e0783.firebaseapp.com",
+      projectId: "sushila-academy-school-e0783",
+      storageBucket: "sushila-academy-school-e0783.firebasestorage.app",
+      messagingSenderId: "583018600105",
+      appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
+    };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db = getFirestore(app);
 
     // Toggle Forms
@@ -145,39 +140,37 @@ appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
     }
     window.toggleForms = toggleForms;
 
-    // Login Handler
-    loginForm.addEventListener("submit", (e) => {
+    // Login
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("login-email").value;
-      const password = document.getElementById("login-password").value;
+      const dob = document.getElementById("login-dob").value;
+      const admno = document.getElementById("login-admno").value;
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("Login successful!");
-          window.location.href = "student-dashboard.html";
-        })
-        .catch((error) => {
-          alert("Login failed: " + error.message);
-        });
+      const q = query(collection(db, "students"), where("dob", "==", dob), where("admissionNo", "==", admno));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        alert("Login successful!");
+        window.location.href = "student-dashboard.html";
+      } else {
+        alert("Login failed: Incorrect DOB or Admission No");
+      }
     });
 
-    // Register Handler
+    // Register
     registerForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("register-email").value;
-      const password = document.getElementById("register-password").value;
+      const dob = document.getElementById("register-dob").value;
+      const admno = document.getElementById("register-admno").value;
 
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        // ✅ Store in Firestore
-        await setDoc(doc(db, "students", user.uid), {
-          email: email,
+        const studentRef = doc(db, "students", admno); // Use admissionNo as unique ID
+        await setDoc(studentRef, {
+          dob: dob,
+          admissionNo: admno,
           createdAt: new Date().toISOString()
         });
-
-        alert("Registration successful! You can now login.");
+        alert("Registration successful!");
         toggleForms();
       } catch (error) {
         alert("Registration failed: " + error.message);
@@ -185,7 +178,6 @@ appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
     });
   </script>
 
-  <!-- AOS Animation -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>AOS.init();</script>
 </body>

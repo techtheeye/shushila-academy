@@ -107,25 +107,7 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js"></script>
-
   <script>
-    // Your Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyBYAqxKyw-cS8NMRgJBE8NJttNbXfOvicQ",
-      authDomain: "sushila-academy-school-e0783.firebaseapp.com",
-      projectId: "sushila-academy-school-e0783",
-      storageBucket: "sushila-academy-school-e0783.appspot.com",
-      messagingSenderId: "583018600105",
-      appId: "1:583018600105:web:9f132fca28e7d1be8d3bb8"
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore(app);
-
     const loginForm = document.getElementById("login-form");
     const registerForm = document.getElementById("register-form");
     const formTitle = document.getElementById("form-title");
@@ -139,53 +121,39 @@
         ? "Already have an account? Login"
         : "Don't have an account? Register";
     }
-
     window.toggleForms = toggleForms;
 
-    // Register logic
-    registerForm.addEventListener("submit", async (e) => {
+    // Register logic using localStorage
+    registerForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const dob = document.getElementById("register-dob").value;
       const admno = document.getElementById("register-admno").value;
 
-      try {
-        const docRef = db.collection("students").doc(admno);
-        const doc = await docRef.get();
-
-        if (doc.exists) {
-          alert("Admission number already registered.");
-          return;
-        }
-
-        await docRef.set({ dob });
-        alert("Registration successful!");
-        toggleForms();
-      } catch (error) {
-        console.error("Error registering student:", error);
-        alert("Registration failed. Please check your connection or try again later.");
+      let students = JSON.parse(localStorage.getItem("students")) || {};
+      if (students[admno]) {
+        alert("Admission number already registered.");
+        return;
       }
+
+      students[admno] = { dob };
+      localStorage.setItem("students", JSON.stringify(students));
+      alert("Registration successful!");
+      toggleForms();
     });
 
-    // Login logic
-    loginForm.addEventListener("submit", async (e) => {
+    // Login logic using localStorage
+    loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const dob = document.getElementById("login-dob").value;
       const admno = document.getElementById("login-admno").value;
 
-      try {
-        const docRef = db.collection("students").doc(admno);
-        const doc = await docRef.get();
-
-        if (doc.exists && doc.data().dob === dob) {
-          alert("Login successful!");
-          localStorage.setItem("loggedInStudent", admno);
-          window.location.href = "student-dashboard.html";
-        } else {
-          alert("Login failed: Incorrect DOB or Admission No");
-        }
-      } catch (error) {
-        console.error("Error logging in:", error);
-        alert("Login failed. Please try again.");
+      let students = JSON.parse(localStorage.getItem("students")) || {};
+      if (students[admno] && students[admno].dob === dob) {
+        alert("Login successful!");
+        localStorage.setItem("loggedInStudent", admno);
+        window.location.href = "student-dashboard.html";
+      } else {
+        alert("Login failed: Incorrect DOB or Admission No");
       }
     });
   </script>
